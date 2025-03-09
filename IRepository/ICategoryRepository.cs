@@ -8,7 +8,7 @@ namespace MVC_Project.IRrepository
     {
         Task<dynamic> AddCategory(Category entity);
         Task<dynamic> GetCategoryById(int id);
-        Task<IEnumerable<Category>> GetCategories(Pagination pagination);
+        Task<CategoryResult> GetCategories(Pagination pagination);
         Task Delete(int id);
         Task update(Category category);
     }

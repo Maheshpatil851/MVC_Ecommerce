@@ -24,7 +24,7 @@ namespace MVC_Project.Repository
             return await _dbContext.Categories.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Category>> GetCategories(Pagination pagination)
+        public async Task<CategoryResult> GetCategories(Pagination pagination)
         {
             IQueryable<Category> query = _dbContext.Categories;
 
@@ -45,7 +45,9 @@ namespace MVC_Project.Repository
                 query = query.Skip((pagination.PageNumber - 1) * pagination.PageSize)
                              .Take(pagination.PageSize);
             }
-            return await query.ToListAsync();
+            var categories = await query.ToListAsync();
+            var totalcategoriesCount = _dbContext.Categories.Count();
+            return new CategoryResult { Categories = categories, TotalCategoriesCount = totalcategoriesCount };
         }
 
 
