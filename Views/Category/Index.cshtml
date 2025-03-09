@@ -45,8 +45,7 @@
                     <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-warning">Edit</a> |
-                        <button class="btn btn-sm btn-danger" onclick="openDeleteModal(@item.CategoryId, '@item.Name')">Delete</button>
-
+                        <button class="btn btn-sm btn-danger" data-modal-type="category" onclick="openDeleteModal(@item.CategoryId, '@item.Name')">Delete</button>
                     </td>
                 </tr>
             }
@@ -75,6 +74,7 @@
         console.log("called");
         $('#productName').text(productName);
         $('#confirmDeleteButton').data('id', productId);
+        $('#confirmDeleteButton').data('modal-type', 'category');
         $('#deleteModal').modal('show');
     }
 
@@ -88,7 +88,7 @@
     }
 
     function goToPage(pageNumber) {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
+        if (true) {
             currentPage = pageNumber;
             loadPageData();
             updatePageInfo();
@@ -108,6 +108,7 @@
             data: {
                 PageNumber: currentPage,
                 PageSize: recordsPerPage,
+                SkipPagination: false,
             },
             success: function (data) {
                 updateTable(data.categories);
@@ -119,6 +120,9 @@
     }
 
     function updateTable(categories) {
+        if (!Array.isArray(categories)) {
+            return;  
+        }
         let tableBody = $('tbody');
         tableBody.empty();
 

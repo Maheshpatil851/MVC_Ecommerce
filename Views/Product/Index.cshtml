@@ -68,7 +68,7 @@
                     <td>@Html.DisplayFor(modelItem => item.Category.CategoryId)</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning">Edit</a> |
-                        <button class="btn btn-sm btn-danger" onclick="openDeleteModal(@item.ProductId, '@item.Name')">Delete</button>
+                        <button class="btn btn-sm btn-danger"  onclick="openDeleteModal(@item.ProductId, '@item.Name')">Delete</button>
                     </td>
                 </tr>
             }
@@ -98,13 +98,14 @@
     function openDeleteModal(productId, productName) {
         console.log("called");
         $('#productName').text(productName);  
-        $('#confirmDeleteButton').data('id', productId);  
+        $('#confirmDeleteButton').data('id', productId); 
+        $('#confirmDeleteButton').data('modal-type', 'product');
         $('#deleteModal').modal('show');  
     }
 
     let currentPage = 1;
     let totalPages = 2;
-    let recordsPerPage = 1;
+    let recordsPerPage = 5;
 
     function updatePageInfo() {
         document.getElementById('currentPage').innerText = currentPage;

@@ -18,11 +18,20 @@ namespace MVC_Project.Controllers
         public async Task<IActionResult> Index(Pagination pagination)
         {
             if (pagination.PageNumber <= 0) pagination.PageNumber = 1;
-            if (pagination.PageSize <= 0) pagination.PageSize = 10;
+            if (pagination.PageSize <= 0) pagination.PageSize = 1;
             if (pagination.SortColumn == null) pagination.SortColumn = "CategoryId";
             if (!pagination.SortDesc) pagination.SortDesc = false;
-            var category = await _unitOfWork.CategoryRepository.GetCategories(pagination);
-            return View(category);
+            var categoryResult = await _unitOfWork.CategoryRepository.GetCategories(pagination);
+            var totalRecords = categoryResult.TotalCategoriesCount;
+
+            var totalPages = (int)Math.Ceiling((double)totalRecords / pagination.PageSize);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { categoryResult.Categories, totalPages });
+            }
+
+            return View(categoryResult.Categories);
         }
 
         [HttpGet]
@@ -92,8 +101,8 @@ namespace MVC_Project.Controllers
             return View(entity);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

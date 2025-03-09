@@ -18,7 +18,7 @@ namespace MVC_Project.Controllers
         public async Task<IActionResult> Index(Pagination pagination)
         {
             if (pagination.PageNumber <= 0) pagination.PageNumber = 1;
-            if (pagination.PageSize <= 0) pagination.PageSize = 1; 
+            if (pagination.PageSize <= 0) pagination.PageSize = 5; 
             if (pagination.SortColumn == null) pagination.SortColumn = "ProductId";  
             if (!pagination.SortDesc) pagination.SortDesc = false;
             var productResult = await _unitOfWork.ProductRepository.GetProducts(pagination);
@@ -42,7 +42,7 @@ namespace MVC_Project.Controllers
                 SkipPagination = true,
             };
             var categories = await _unitOfWork.CategoryRepository.GetCategories(pagination); 
-            ViewBag.CategoryId = new SelectList(categories, "CategoryId", "Name");
+            ViewBag.CategoryId = new SelectList(categories.Categories, "CategoryId", "Name");
             return View();
         }
 
@@ -82,7 +82,7 @@ namespace MVC_Project.Controllers
 
             var pagination = new Pagination { SkipPagination = true };
             var categories = await _unitOfWork.CategoryRepository.GetCategories(pagination);
-            ViewBag.CategoryId = new SelectList(categories, "CategoryId", "Name");
+            ViewBag.CategoryId = new SelectList(categories.Categories, "CategoryId", "Name");
 
             return View(product);
         }

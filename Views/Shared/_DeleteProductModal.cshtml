@@ -21,12 +21,16 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // function openDeleteModal(productId, productName) {
+    // function openDeleteModal(productId, productName, ModalType) {
     //     $('#productName').text(productName);  
-    //     $('#confirmDeleteButton').data('id', productId);  
+    //     $('#confirmDeleteButton').data('id', productId);
+    //     $('#confirmDeleteButton').data('modal-type', ModalType);
     //     $('#deleteModal').modal('show');  
     // }
+
+    
 
     function closeDeleteModal() {
         console.log("clicked");
@@ -34,20 +38,36 @@
     }
 
     $('#confirmDeleteButton').click(function () {
-        console.log("clicked");
+        var modalType = $(this).data('modal-type');
         var productId = $(this).data('id');
-        console.log("productId", productId);
-        $.ajax({
-            url: '@Url.Action("Delete", "Product")',  
-            type: 'POST',
-            data: { id: productId },
-            success: function (response) {
-                $('#deleteModal').modal('hide');
-                location.reload();  
-            },
-            error: function () {
-                alert('Error deleting product');
-            }
-        });
+        console.log("fun clicked", modalType, productId);
+        if (modalType == "product") {
+            $.ajax({
+                url: '@Url.Action("Delete", "Product")',
+                type: 'POST',
+                data: { id: productId },
+                success: function (response) {
+                    $('#deleteModal').modal('hide');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error deleting product');
+                }
+            });
+        }
+        else if (modalType == "category") {
+            $.ajax({
+                url: '@Url.Action("Delete", "Category")',
+                type: 'POST',
+                data: { id: productId },
+                success: function (response) {
+                    $('#deleteModal').modal('hide');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error deleting category .');
+                }
+            });
+        }
     });
 </script>
